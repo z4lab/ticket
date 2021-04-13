@@ -1,0 +1,23 @@
+{
+  "name": "ticket",
+  "version": "0.0.1",
+  "description": "A ticket support bot for the z4lab community discord",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/z4lab/ticket.git"
+  },
+  "keywords": [],
+  "author": "Riccardo \"ace\" H.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/z4lab/ticket/issues"
+  },
+  "homepage": "https://github.com/z4lab/ticket#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1"
+  }
+}
