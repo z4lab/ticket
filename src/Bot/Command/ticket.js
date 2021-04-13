@@ -18,18 +18,18 @@ module.exports = class extends Command {
 				channel.createWebhook('Ticket System')
 				.then(w => {
 					w.send({
-					    content: `Welcome ${this.ticket.creator}`,
-					    embeds: [{
-					        title: "Ticket Details",
-					        color: "#5E81AC",
-					        fields: [{
-					        	name: "Ticket ID",
-					        	value: this.ticket.id
-					        },{
-					        	name: "Opened by",
-					        	value: this.ticket.creatorTag + ` ~ (${this.ticket.creator.id})`
-					        }]
-					    }]
+						content: `Welcome ${this.ticket.creator}`,
+						embeds: [{
+							title: "Ticket Details",
+							color: "#5E81AC",
+							fields: [{
+								name: "Ticket ID",
+								value: this.ticket.id
+							},{
+								name: "Opened by",
+								value: this.ticket.creatorTag + ` ~ (${this.ticket.creator.id})`
+							}]
+						}]
 					}).then(async commandMessage => {
 						await commandMessage.react("✅");
 						await commandMessage.react("❌");
@@ -46,33 +46,33 @@ module.exports = class extends Command {
 							} else {
 								if (this.ticket.solved && r.emoji.name === "✅") {
 									w.send({embeds: [{
-								        title: "✅ Marked solved",
-								        color: "#A3BE8C"
-								    }]})
-								    commandMessage.channel.overwritePermissions(
-								    	[{
-								    		id: this.Client.Client.guilds.cache.first().roles.everyone, 
-								    		deny: ['VIEW_CHANNEL', 'SEND_MESSAGES']
-								    	},{
-								    		id: this.ticket.creator.id, 
-								    		deny: ['SEND_MESSAGES'],
-								    		allow: ['VIEW_CHANNEL']
-								    	}]);
+										title: "✅ Marked solved",
+										color: "#A3BE8C"
+									}]})
+									commandMessage.channel.overwritePermissions(
+										[{
+											id: this.Client.Client.guilds.cache.first().roles.everyone, 
+											deny: ['VIEW_CHANNEL', 'SEND_MESSAGES']
+										},{
+											id: this.ticket.creator.id, 
+											deny: ['SEND_MESSAGES'],
+											allow: ['VIEW_CHANNEL']
+										}]);
 								}
 								if (this.ticket.solved && r.emoji.name === "❌") {
 									w.send({embeds: [{
-								        title: "❌ Marked closed",
-								        color: "#BF616A"
-								    }]})
-								    commandMessage.channel.overwritePermissions(
-								    	[{
-								    		id: this.Client.Client.guilds.cache.first().roles.everyone, 
-								    		deny: ['VIEW_CHANNEL', 'SEND_MESSAGES']
-								    	},{
-								    		id: this.ticket.creator.id, 
-								    		deny: ['SEND_MESSAGES', 'VIEW_CHANNEL']
-								    	}]);
-								    commandMessage.channel.setParent("831607684976476200");
+										title: "❌ Marked closed",
+										color: "#BF616A"
+									}]})
+									commandMessage.channel.overwritePermissions(
+										[{
+											id: this.Client.Client.guilds.cache.first().roles.everyone, 
+											deny: ['VIEW_CHANNEL', 'SEND_MESSAGES']
+										},{
+											id: this.ticket.creator.id, 
+											deny: ['SEND_MESSAGES', 'VIEW_CHANNEL']
+										}]);
+									commandMessage.channel.setParent("831607684976476200");
 								}
 							}
 
