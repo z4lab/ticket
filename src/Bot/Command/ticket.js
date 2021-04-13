@@ -10,8 +10,12 @@ module.exports = class extends Command {
 			id: String((Math.floor(Math.random() * 9000) + 1000)),
 			creator: this.message.author,
 			creatorTag: this.message.author.username + "#" + this.message.author.discriminator,
-			solved: false,
-			closed: false
+			solved: {
+				state: 0
+			},
+			closed: {
+				state: false
+			}
 		}
 		this.Client.Client.guilds.cache.first().channels.create("Ticket #" + this.ticket.id, {
 				topic: `Ticket #${this.ticket.id} opened by ${this.ticket.creatorTag}`,
@@ -51,12 +55,29 @@ module.exports = class extends Command {
 							});
 							commandMessage.reactionCollector.on('collect', r => {
 								if (r.users.cache.last().id === this.ticket.creator.id) {
-									if (!(this.ticket.solved || this.ticket.closed)) {
-										if (r.emoji.name === "✅") this.ticket.solved = true;
-										if (r.emoji.name === "❌") this.ticket.closed = true;
+									if (this.ticket.solved.state == 0 || !this.ticket.closed.state) {
+										if (r.emoji.name === "✅") {
+											this.ticket.solved.state = 1;
+											w.send({
+												embeds: [{
+													title: "☑️ Solved marking requested by user",
+													color: "#5E81AC"
+												}]
+											});
+										}
+										if (r.emoji.name === "❌" && this.ticket.solved.state == 2) {
+											this.ticket.closed.state = true;
+											w.send({
+												embeds: [{
+													title: "☑️ Closed marking requested by user",
+													color: "#5E81AC"
+												}]
+											});
+										}
 									}
 								} else {
-									if (this.ticket.solved && r.emoji.name === "✅") {
+									if (this.ticket.solved.state == 1 && r.emoji.name === "✅") {
+										this.ticket.solved.state = 2;
 										w.send({
 											embeds: [{
 												title: "✅ Marked solved",
@@ -73,13 +94,22 @@ module.exports = class extends Command {
 												allow: ['VIEW_CHANNEL']
 											}]);
 									}
-									if (this.ticket.solved && r.emoji.name === "❌") {
-										w.send({
+									if (this.ticket.solved.state == 2 && r.emoji.name === "❌") {
+										if (this.ticket.closed.state) await w.send({
 											embeds: [{
 												title: "❌ Marked closed",
 												color: "#BF616A"
 											}]
 										})
+										else {
+											this.ticket.closed.state = true;
+											await w.send({
+												embeds: [{
+													title: "❌ Marked force closed",
+													color: "#BF616A"
+												}]
+											})
+										}
 										commandMessage.channel.overwritePermissions(
 											[{
 												id: this.Client.Client.guilds.cache.first().roles.everyone,
